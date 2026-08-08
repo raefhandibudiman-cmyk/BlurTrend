@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 Flask==3.1.3
-=======
-Flask==3.1.3
->>>>>>> 59e1b953e6f6057f4b3c42f6cd0105db152519e5
 gunicorn==26.0.0
+opencv-python-headless
+mediapipe
+numpy
