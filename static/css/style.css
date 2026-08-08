@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 body{
     margin:0;
     padding:0;
@@ -17,4 +18,25 @@ button{
     border:none;
     border-radius:10px;
     cursor:pointer;
+=======
+body{
+    margin:0;
+    padding:0;
+    background:#111;
+    color:white;
+    font-family:Arial;
+}
+
+.container{
+    text-align:center;
+    margin-top:120px;
+}
+
+button{
+    padding:15px 35px;
+    font-size:18px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+>>>>>>> 59e1b953e6f6057f4b3c42f6cd0105db152519e5
 }
