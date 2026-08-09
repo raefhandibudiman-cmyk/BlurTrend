@@ -1,165 +1,210 @@
-{`import {
-    FilesetResolver,
-    HandLandmarker
-} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22-rc.20250304";
-
 const video = document.getElementById("camera");
 const startButton = document.getElementById("startButton");
 const status = document.getElementById("status");
 const cameraSelect = document.getElementById("cameraSelect");
 
-let handLandmarker = null;
 let stream = null;
-let cameraRunning = false;
-let lastVideoTime = -1;
 
-// LOAD MEDIAPIPE
-async function loadMediaPipe() {
-    try {
-        status.innerText = "⏳ Memuat MediaPipe...";
+// ======================================================
+// CEK BROWSER
+// ======================================================
 
-        const vision = await FilesetResolver.forVisionTasks(
-            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22-rc.20250304/wasm"
-        );
-
-        handLandmarker = await HandLandmarker.createFromOptions(vision, {
-            baseOptions: {
-                modelAssetPath:
-                    "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task"
-            },
-            runningMode: "VIDEO",
-            numHands: 1,
-            minHandDetectionConfidence: 0.5,
-            minHandPresenceConfidence: 0.5,
-            minTrackingConfidence: 0.5
-        });
-
-        status.innerText = "✅ MediaPipe siap. Pilih kamera.";
-    } catch (error) {
-        console.error(error);
-        status.innerText = "❌ MediaPipe gagal dimuat.";
+function checkBrowser() {
+    if (!window.isSecureContext) {
+        status.innerText = "❌ Website harus HTTPS.";
+        return false;
     }
+
+    if (!navigator.mediaDevices) {
+        status.innerText = "❌ Browser tidak mendukung kamera.";
+        return false;
+    }
+
+    return true;
 }
 
+// ======================================================
 // CARI KAMERA
+// ======================================================
+
 async function getCameras() {
+
+    if (!checkBrowser()) return;
+
     try {
-        const tempStream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: false
-        });
+
+        status.innerText = "⏳ Mencari kamera...";
+
+        // Minta izin kamera
+        const tempStream =
+            await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            });
 
         tempStream.getTracks().forEach(track => track.stop());
 
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const cameras = devices.filter(device => device.kind === "videoinput");
+        const devices =
+            await navigator.mediaDevices.enumerateDevices();
+
+        const cameras =
+            devices.filter(
+                device => device.kind === "videoinput"
+            );
 
         cameraSelect.innerHTML = "";
 
+        const defaultOption =
+            document.createElement("option");
+
+        defaultOption.value = "";
+        defaultOption.textContent = "📷 Pilih Kamera";
+
+        cameraSelect.appendChild(defaultOption);
+
         cameras.forEach((camera, index) => {
-            const option = document.createElement("option");
+
+            const option =
+                document.createElement("option");
+
             option.value = camera.deviceId;
-            option.textContent = camera.label || \`Kamera \${index + 1}\`;
+
+            option.textContent =
+                camera.label || `Kamera ${index + 1}`;
+
             cameraSelect.appendChild(option);
+
         });
 
-        status.innerText = \`✅ \${cameras.length} kamera ditemukan.\`;
+        status.innerText =
+            `✅ ${cameras.length} kamera ditemukan.`;
+
     } catch (error) {
+
         console.error(error);
-        status.innerText = "❌ Izin kamera ditolak.";
+
+        status.innerText =
+            "❌ Tidak bisa mengakses kamera.";
+
     }
 }
 
-// MULAI KAMERA
+// ======================================================
+// START CAMERA
+// ======================================================
+
 async function startCamera() {
-    try {
-        const selectedCamera = cameraSelect.value;
 
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                deviceId: { exact: selectedCamera },
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            },
-            audio: false
-        });
+    if (!checkBrowser()) return;
 
-        video.srcObject = stream;
-        video.muted = true;
-        video.autoplay = true;
-        video.playsInline = true;
+    const selectedCamera =
+        cameraSelect.value;
 
-        await new Promise(resolve => {
-            video.onloadedmetadata = resolve;
-        });
+    if (!selectedCamera) {
 
-        await video.play();
+        status.innerText =
+            "⚠️ Pilih kamera terlebih dahulu.";
 
-        console.log("Ukuran video:", video.videoWidth, video.videoHeight);
-
-        cameraRunning = true;
-        startButton.disabled = true;
-        startButton.innerText = "✅ Kamera Aktif";
-        status.innerText = "✅ Kamera aktif — angkat ✌️";
-
-        detectHands();
-    } catch (error) {
-        console.error(error);
-        status.innerText = "❌ Kamera gagal: " + error.name;
+        return;
     }
-}
 
-// DETEKSI DUA JARI
-function isTwoFingers(landmarks) {
-    return (
-        landmarks[8].y < landmarks[6].y &&
-        landmarks[12].y < landmarks[10].y &&
-        landmarks[16].y > landmarks[14].y &&
-        landmarks[20].y > landmarks[18].y
-    );
-}
+    try {
 
-// DETEKSI
-function detectHands() {
-    if (!cameraRunning) return;
+        // Matikan kamera sebelumnya
+        if (stream) {
 
-    if (video.readyState >= 2 && video.videoWidth > 0) {
-        if (video.currentTime !== lastVideoTime) {
-            lastVideoTime = video.currentTime;
-
-            const results = handLandmarker.detectForVideo(
-                video,
-                performance.now()
+            stream.getTracks().forEach(
+                track => track.stop()
             );
 
-            let twoFingers = false;
-
-            if (results.landmarks.length > 0) {
-                twoFingers = isTwoFingers(results.landmarks[0]);
-            }
-
-            if (twoFingers) {
-                video.style.filter = "blur(18px)";
-                status.innerText = "❤️ BLUR AKTIF — ✌️";
-            } else {
-                video.style.filter = "none";
-                status.innerText = "✋ Angkat dua jari ✌️";
-            }
         }
-    }
 
-    requestAnimationFrame(detectHands);
+        // Ambil kamera
+        stream =
+            await navigator.mediaDevices.getUserMedia({
+
+                video: {
+                    deviceId: {
+                        exact: selectedCamera
+                    },
+
+                    width: {
+                        ideal: 1280
+                    },
+
+                    height: {
+                        ideal: 720
+                    }
+                },
+
+                audio: false
+            });
+
+        console.log("STREAM:", stream);
+
+        // Masukkan stream ke VIDEO
+        video.srcObject = stream;
+
+        // Pastikan video terlihat
+        video.style.display = "block";
+        video.style.visibility = "visible";
+        video.style.opacity = "1";
+        video.style.filter = "none";
+
+        // Tunggu metadata kamera
+        await new Promise(resolve => {
+
+            video.onloadedmetadata = () => {
+                resolve();
+            };
+
+        });
+
+        console.log(
+            "Video width:",
+            video.videoWidth
+        );
+
+        console.log(
+            "Video height:",
+            video.videoHeight
+        );
+
+        // Play
+        await video.play();
+
+        startButton.disabled = true;
+
+        startButton.innerText =
+            "✅ Kamera Aktif";
+
+        status.innerText =
+            "📷 Kamera sedang aktif";
+
+    } catch (error) {
+
+        console.error(
+            "CAMERA ERROR:",
+            error
+        );
+
+        status.innerText =
+            "❌ Kamera gagal: " +
+            error.name;
+    }
 }
 
-startButton.addEventListener("click", async () => {
-    if (handLandmarker) {
-        await startCamera();
-    }
-});
+// ======================================================
+// BUTTON
+// ======================================================
 
-async function initialize() {
-    await loadMediaPipe();
-    await getCameras();
-}
+startButton.addEventListener(
+    "click",
+    startCamera
+);
 
-initialize();`}
+// ======================================================
+// INITIALIZE
+// ======================================================
+
+getCameras();
