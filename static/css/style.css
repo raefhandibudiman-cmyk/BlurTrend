@@ -4,11 +4,16 @@
 
 body {
     margin: 0;
-    padding: 0;
+    padding: 20px;
+
     min-height: 100vh;
+
     background: #111;
+
     color: white;
+
     font-family: Arial, sans-serif;
+
     text-align: center;
 }
 
@@ -19,17 +24,27 @@ h1 {
 .container {
     width: 95%;
     max-width: 900px;
+
     margin: auto;
 }
 
+/* =========================
+   KAMERA
+========================= */
+
 #camera {
+
     width: 100%;
-    height: auto;
+
+    max-width: 900px;
+
     min-height: 300px;
 
     display: block;
 
-    background: #222;
+    margin: 20px auto;
+
+    background: #333;
 
     border-radius: 18px;
 
@@ -38,28 +53,36 @@ h1 {
     transform: scaleX(-1);
 }
 
+/* =========================
+   CONTROL
+========================= */
+
 .controls {
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 select {
     width: 90%;
+
     max-width: 500px;
 
-    padding: 13px;
+    padding: 14px;
 
-    border-radius: 10px;
     border: none;
 
-    font-size: 16px;
+    border-radius: 10px;
 
-    margin-bottom: 10px;
+    font-size: 16px;
 }
 
 button {
+
+    margin-top: 10px;
+
     padding: 14px 25px;
 
     border: none;
+
     border-radius: 10px;
 
     font-size: 17px;
@@ -67,16 +90,21 @@ button {
     cursor: pointer;
 
     background: white;
+
     color: #111;
 }
 
 button:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
 }
 
+/* =========================
+   STATUS
+========================= */
+
 #status {
-    margin: 15px;
+
+    margin: 20px;
 
     font-size: 18px;
 
@@ -84,13 +112,10 @@ button:disabled {
 }
 
 .instruction {
+
     margin-top: 10px;
 
     color: #ccc;
 
     font-size: 15px;
-}
-
-#canvas {
-    display: none;
 }
