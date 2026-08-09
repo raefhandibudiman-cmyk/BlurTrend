@@ -1,42 +1,100 @@
-<<<<<<< HEAD
-body{
-    margin:0;
-    padding:0;
-    background:#111;
-    color:white;
-    font-family:Arial;
+* {
+    box-sizing: border-box;
 }
 
-.container{
-    text-align:center;
-    margin-top:120px;
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+
+    background: linear-gradient(
+        135deg,
+        #111111,
+        #1d1d1d
+    );
+
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
-button{
-    padding:15px 35px;
-    font-size:18px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-=======
-body{
-    margin:0;
-    padding:0;
-    background:#111;
-    color:white;
-    font-family:Arial;
+.container {
+    width: 95%;
+    max-width: 900px;
+    margin: 30px auto;
 }
 
-.container{
-    text-align:center;
-    margin-top:120px;
+h1 {
+    margin: 20px 0;
+    font-size: 35px;
 }
 
-button{
-    padding:15px 35px;
-    font-size:18px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
->>>>>>> 59e1b953e6f6057f4b3c42f6cd0105db152519e5
+#camera {
+    display: none;
+}
+
+#canvas {
+    width: 100%;
+    display: block;
+
+    border-radius: 18px;
+    background: #222;
+
+    transform: scaleX(-1);
+}
+
+.controls {
+    margin-top: 15px;
+}
+
+select {
+    width: 90%;
+    max-width: 500px;
+
+    padding: 13px;
+
+    border-radius: 10px;
+    border: none;
+
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 14px 25px;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    background: white;
+    color: #111;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#status {
+    margin: 15px;
+
+    font-size: 18px;
+
+    min-height: 25px;
+}
+
+.instruction {
+    margin-top: 10px;
+
+    color: #cccccc;
+
+    font-size: 15px;
 }
