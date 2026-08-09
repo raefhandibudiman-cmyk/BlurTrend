@@ -2,11 +2,12 @@
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
-    padding: 20px;
-
-    min-height: 100vh;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
 
     background: #111;
 
@@ -17,26 +18,33 @@ body {
     text-align: center;
 }
 
+body {
+    min-height: 100vh;
+    padding: 15px;
+}
+
 h1 {
-    margin: 20px 0;
+    margin: 20px 0 15px;
+
+    font-size: 32px;
 }
 
 .container {
-    width: 95%;
+    width: 100%;
     max-width: 900px;
 
     margin: auto;
 }
 
-/* =========================
+/* ==========================================
    KAMERA
-========================= */
+========================================== */
 
 #camera {
 
     width: 100%;
 
-    max-width: 900px;
+    height: auto;
 
     min-height: 300px;
 
@@ -44,78 +52,162 @@ h1 {
 
     margin: 20px auto;
 
-    background: #333;
+    background: #222;
 
     border-radius: 18px;
 
     object-fit: cover;
 
     transform: scaleX(-1);
+
+    transition:
+        filter 0.2s ease,
+        -webkit-filter 0.2s ease;
 }
 
-/* =========================
+
+/* ==========================================
    CONTROL
-========================= */
+========================================== */
 
 .controls {
-    margin-top: 20px;
+    width: 100%;
+
+    margin-top: 15px;
 }
 
 select {
+
     width: 90%;
 
     max-width: 500px;
 
-    padding: 14px;
+    padding: 13px;
 
     border: none;
 
     border-radius: 10px;
 
     font-size: 16px;
-}
-
-button {
-
-    margin-top: 10px;
-
-    padding: 14px 25px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    font-size: 17px;
-
-    cursor: pointer;
 
     background: white;
 
     color: #111;
 }
 
-button:disabled {
-    opacity: 0.5;
+button {
+
+    padding:
+        14px 25px;
+
+    border:
+        none;
+
+    border-radius:
+        10px;
+
+    font-size:
+        17px;
+
+    cursor:
+        pointer;
+
+    background:
+        white;
+
+    color:
+        #111;
 }
 
-/* =========================
+button:disabled {
+
+    opacity:
+        0.5;
+
+    cursor:
+        not-allowed;
+}
+
+
+/* ==========================================
    STATUS
-========================= */
+========================================== */
 
 #status {
 
-    margin: 20px;
+    margin:
+        15px;
 
-    font-size: 18px;
+    font-size:
+        18px;
 
-    min-height: 25px;
+    min-height:
+        25px;
 }
+
+
+/* ==========================================
+   INSTRUCTION
+========================================== */
 
 .instruction {
 
-    margin-top: 10px;
+    margin-top:
+        10px;
 
-    color: #ccc;
+    color:
+        #cccccc;
 
-    font-size: 15px;
+    font-size:
+        15px;
+}
+
+
+/* ==========================================
+   HP
+========================================== */
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding:
+            10px;
+
+    }
+
+    h1 {
+
+        font-size:
+            27px;
+
+    }
+
+    #camera {
+
+        min-height:
+            250px;
+
+        border-radius:
+            14px;
+
+    }
+
+    button {
+
+        width:
+            90%;
+
+        max-width:
+            400px;
+
+    }
+
+    select {
+
+        width:
+            90%;
+
+    }
+
 }
