@@ -6,39 +6,34 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
-
-    background: linear-gradient(
-        135deg,
-        #111111,
-        #1d1d1d
-    );
-
+    background: #111;
     color: white;
     font-family: Arial, sans-serif;
     text-align: center;
 }
 
+h1 {
+    margin: 20px 0;
+}
+
 .container {
     width: 95%;
     max-width: 900px;
-    margin: 30px auto;
-}
-
-h1 {
-    margin: 20px 0;
-    font-size: 35px;
+    margin: auto;
 }
 
 #camera {
-    display: none;
-}
-
-#canvas {
     width: 100%;
+    height: auto;
+    min-height: 300px;
+
     display: block;
 
-    border-radius: 18px;
     background: #222;
+
+    border-radius: 18px;
+
+    object-fit: cover;
 
     transform: scaleX(-1);
 }
@@ -57,6 +52,7 @@ select {
     border: none;
 
     font-size: 16px;
+
     margin-bottom: 10px;
 }
 
@@ -72,10 +68,6 @@ button {
 
     background: white;
     color: #111;
-}
-
-button:hover {
-    opacity: 0.9;
 }
 
 button:disabled {
@@ -94,7 +86,11 @@ button:disabled {
 .instruction {
     margin-top: 10px;
 
-    color: #cccccc;
+    color: #ccc;
 
     font-size: 15px;
+}
+
+#canvas {
+    display: none;
 }
